@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер Китрикоин</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url('https://cataas.com/cat/orange,cute');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        #coin {
+            width: 100px;
+            height: 100px;
+            background-image: url('https://sdmntprwestus2.oaiusercontent.com/files/00000000-773c-61f8-bec4-6b40a398ba00/raw?se=2025-05-24T19%3A35%3A42Z&sp=r&sv=2024-08-04&sr=b&scid=ee1c570d-c653-5409-a8cc-b894b10eec4a&skoid=b928fb90-500a-412f-a661-1ece57a7c318&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-24T18%3A20%3A47Z&ske=2025-05-25T18%3A20%3A47Z&sks=b&skv=2024-08-04&sig=n5qFRin1nliasvDwzPQYIfGC0CkKX4gm3EfifL1fkWY%3D');
+            background-size: cover;
+            cursor: pointer;
+        }
+        #score {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        #transfer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 200px;
+        }
+        button {
+            padding: 10px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff4500;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="coin"></div>
+    <div id="score">Счет: 0</div>
+    <div id="transfer">
+        <input type="text" id="telegramNick" placeholder="Ник в Телеграмме" required>
+        <input type="number" id="transferAmount" placeholder="Количество для передачи" max="150" required>
+        <button id="transferButton">Передать монеты</button>
+    </div>
+
+    <script>
+        let score = 0;
+
+        document.getElementById('coin').onclick = function() {
+            if (score < 150) {
+                score++;
+                document.getElementById('score').textContent = 'Счет: ' + score;
+            }
+        }
+
+        document.getElementById('transferButton').onclick = function(event) {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+            const transferAmount = parseInt(document.getElementById('transferAmount').value);
+            const telegramNick = document.getElementById('telegramNick').value.trim();
+            
+            // Проверка на валидный ник
+            const nickPattern = /^[a-zA-Z0-9_]{5,}$/; // минимум 5 символов
+            if (!nickPattern.test(telegramNick)) {
+                alert('Некорректный ник! Используйте только буквы, цифры и "_" (минимум 5 символов).');
+                return;
+            }
+
+            if (transferAmount > 0 && transferAmount <= score) {
+                score -= transferAmount;
+                document.getElementById('score').textContent = 'Счет: ' + score;
+                alert('Вы передали ' + transferAmount + ' Китрикоинов пользователю ' + telegramNick + '!');
+            } else {
+                alert('Неверное количество или недостаточно монет для передачи!');
+            }
+        }
+    </script>
+
+</body>
+</html>
