@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер Китрикоин</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url('https://cataas.com/cat/orange,cute');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        #coin {
+            width: 100px;
+            height: 100px;
+            background-image: url('https://avatars.dzeninfra.ru/get-zen_brief/271828/pub_6832fc2ed0b5650e72124123_6832fc650fd2a86ff5b34291/scale_2400');
+            background-size: cover;
+            cursor: pointer;
+        }
+        #score {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        #transfer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 200px;
+        }
+        button {
+            padding: 10px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff4500;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="coin"></div>
+    <div id="score">Счет: 0</div>
+    <div id="transfer">
+        <input type="text" id="telegramNick" placeholder="Ник в Телеграмме" required>
+        <input type="number" id="transferAmount" placeholder="Количество для передачи" max="150" required>
+        <button id="transferButton">Передать монеты</button>
+    </div>
+
+    <script>
+        let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+
+        // Отображаем сохранённый счет
+        document.getElementById('score').textContent = 'Счет: ' + score;
+
+        document.getElementById('coin').onclick = function() {
+            if (score < 150) {
+                score++;
+                document.getElementById('score').textContent = 'Счет: ' + score;
+                localStorage.setItem('score', score); // Сохраняем счет
+            }
+        }
+
+        document.getElementById('transferButton').onclick = function(event) {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+            const transferAmount = parseInt(document.getElementById('transferAmount').value);
+            const telegramNick = document.getElementById('telegramNick').value.trim();
+            
+            // Проверка на валидный ник
+            const nickPattern = /^[a-zA-Z0-9_]{5,}$/; // минимум 5 символов
+            if (!nickPattern.test(telegramNick)) {
+                alert('Некорректный ник! Используйте только буквы, цифры и "_" (минимум 5 символов).');
+                return;
+            }
+
+            if (transferAmount > 0 && transferAmount <= score) {
+                score -= transferAmount;
+                document.getElementById('score').textContent = 'Счет: ' + score;
+                localStorage.setItem('score', score); // Сохраняем обновлённый счет
+                alert('Вы передали ' + transferAmount + ' Китрикоинов пользователю ' + telegramNick + '!');
+            } else 
+                {alert('Неверное количество или недостаточно монет для передачи!');
+            }
+        }
+    </script>
+
+</body>
+</html>
+
